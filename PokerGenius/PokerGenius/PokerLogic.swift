@@ -15,7 +15,7 @@ class PokerHand {
         }
         
         var wins = 0
-        var deck = generateDeck().filter { !allCards.contains($0) }
+        let deck = generateDeck().filter { !allCards.contains($0) }
         let simulations = 15000
         
         for _ in 0..<simulations {
