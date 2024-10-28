@@ -57,23 +57,25 @@ class PokerHand {
         let ranks = sortedCards.map { $0.rank }
         let suits = sortedCards.map { $0.suit }
         
-        // Check for flush
-        if suits.filter({ $0 == suits[0] }).count >= 5 {
-            return 6000 + rankValue(ranks[0])
+        // Check for Royal Flush (highest possible hand)
+        let royalRanks = ["A", "K", "Q", "J", "10"]
+        for suit in suits {
+            let suitedCards = sortedCards.filter { $0.suit == suit }
+            if suitedCards.count >= 5 {
+                let suitedRanks = suitedCards.map { $0.rank }
+                if royalRanks.allSatisfy({ suitedRanks.contains($0) }) {
+                    return 10000  // Highest possible score
+                }
+            }
         }
         
-        // Check for straight
-        var straightCount = 1
-        var straightHighCard = ranks[0]
-        for i in 1..<ranks.count {
-            if rankValue(ranks[i]) == rankValue(ranks[i-1]) - 1 {
-                straightCount += 1
-                if straightCount == 5 {
-                    return 5000 + rankValue(straightHighCard)
+        // Check for Straight Flush
+        for suit in suits {
+            let suitedCards = sortedCards.filter { $0.suit == suit }
+            if suitedCards.count >= 5 {
+                if let straightHighCard = checkForStraight(suitedCards.map { $0.rank }) {
+                    return 9000 + rankValue(straightHighCard)
                 }
-            } else if rankValue(ranks[i]) != rankValue(ranks[i-1]) {
-                straightCount = 1
-                straightHighCard = ranks[i]
             }
         }
         
@@ -83,39 +85,79 @@ class PokerHand {
             rankCounts[rank, default: 0] += 1
         }
         
-        let sortedCounts = rankCounts.sorted { $0.value > $1.value || ($0.value == $1.value && rankValue($0.key) > rankValue($1.key)) }
+        let sortedCounts = rankCounts.sorted { 
+            $0.value > $1.value || ($0.value == $1.value && rankValue($0.key) > rankValue($1.key)) 
+        }
         
-        // Check for four of a kind
+        // Check for Four of a Kind
         if sortedCounts[0].value == 4 {
-            return 7000 + rankValue(sortedCounts[0].key)
+            return 8000 + rankValue(sortedCounts[0].key)
         }
         
-        // Check for full house
+        // Check for Full House
         if sortedCounts[0].value == 3 && sortedCounts[1].value >= 2 {
-            return 6000 + rankValue(sortedCounts[0].key) * 13 + rankValue(sortedCounts[1].key)
+            return 7000 + rankValue(sortedCounts[0].key) * 13 + rankValue(sortedCounts[1].key)
         }
         
-        // Check for three of a kind
+        // Check for Flush
+        for suit in suits {
+            let suitedCards = sortedCards.filter { $0.suit == suit }
+            if suitedCards.count >= 5 {
+                return 6000 + rankValue(suitedCards[0].rank)
+            }
+        }
+        
+        // Check for Straight
+        if let straightHighCard = checkForStraight(ranks) {
+            return 5000 + rankValue(straightHighCard)
+        }
+        
+        // Check for Three of a Kind
         if sortedCounts[0].value == 3 {
             return 4000 + rankValue(sortedCounts[0].key)
         }
         
-        // Check for two pair
+        // Check for Two Pair
         if sortedCounts[0].value == 2 && sortedCounts[1].value == 2 {
-            return 3000 + max(rankValue(sortedCounts[0].key), rankValue(sortedCounts[1].key)) * 13 + min(rankValue(sortedCounts[0].key), rankValue(sortedCounts[1].key))
+            return 3000 + max(rankValue(sortedCounts[0].key), rankValue(sortedCounts[1].key)) * 13 
+                + min(rankValue(sortedCounts[0].key), rankValue(sortedCounts[1].key))
         }
         
-        // Check for one pair
+        // Check for One Pair
         if sortedCounts[0].value == 2 {
             return 2000 + rankValue(sortedCounts[0].key)
         }
         
-        // High card
+        // High Card
         return 1000 + rankValue(ranks[0])
     }
     
     private static func rankValue(_ rank: String) -> Int {
         return ranks.firstIndex(of: rank)!
+    }
+    
+    private static func checkForStraight(_ ranks: [String]) -> String? {
+        let uniqueRanks = Array(Set(ranks)).sorted { rankValue($0) > rankValue($1) }
+        if uniqueRanks.count < 5 { return nil }
+        
+        // Check for Ace-low straight (A,2,3,4,5)
+        if ranks.contains("A") {
+            let lowStraight = ["5", "4", "3", "2", "A"]
+            if lowStraight.allSatisfy({ ranks.contains($0) }) {
+                return "5"
+            }
+        }
+        
+        // Check for regular straights
+        for i in 0...(uniqueRanks.count - 5) {
+            let possibleStraight = uniqueRanks[i...(i+4)]
+            let values = possibleStraight.map { rankValue($0) }
+            if values[0] - values[4] == 4 {
+                return uniqueRanks[i]
+            }
+        }
+        
+        return nil
     }
     
     static func hasDuplicates(_ cards: [Card]) -> Bool {

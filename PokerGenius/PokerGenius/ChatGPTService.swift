@@ -3,7 +3,7 @@ import UIKit
 
 class ChatGPTService {
     static let shared = ChatGPTService()
-    private let apiKey = "YOUR-OPENAI-API-KEY"
+    private let apiKey = "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"
     private let apiUrl = "https://api.openai.com/v1/chat/completions"
 
     func analyzeImage(_ image: UIImage, completion: @escaping (Result<String, Error>) -> Void) {
