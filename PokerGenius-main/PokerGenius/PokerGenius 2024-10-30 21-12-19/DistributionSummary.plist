@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PokerGenius.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>buildNumber</key>
+			<string>2</string>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>C97CCD536721CD43BF1EC49574B0EFD3FDA6F6B8</string>
+				<key>dateExpires</key>
+				<string>2/14/25</string>
+				<key>type</key>
+				<string>Cloud Managed Apple Distribution</string>
+			</dict>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>4K64J37G9P.com.LightPhoenix.PokerGenius</string>
+				<key>beta-reports-active</key>
+				<true/>
+				<key>com.apple.developer.team-identifier</key>
+				<string>4K64J37G9P</string>
+				<key>get-task-allow</key>
+				<false/>
+			</dict>
+			<key>name</key>
+			<string>PokerGenius.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>d4d77dda-ce19-44bf-a9ea-69cb7b7dbcf2</string>
+				<key>dateExpires</key>
+				<string>2/14/25</string>
+				<key>name</key>
+				<string>iOS Team Store Provisioning Profile: com.LightPhoenix.PokerGenius</string>
+			</dict>
+			<key>symbols</key>
+			<true/>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>4K64J37G9P</string>
+				<key>name</key>
+				<string>Attilio Ingargiola</string>
+			</dict>
+			<key>versionNumber</key>
+			<string>1.0</string>
+		</dict>
+	</array>
+</dict>
+</plist>
