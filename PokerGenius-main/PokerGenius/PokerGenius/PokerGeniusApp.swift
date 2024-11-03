@@ -12,6 +12,7 @@ struct PokerGeniusApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+            
         }
     }
 }
